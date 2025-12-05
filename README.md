@@ -1,232 +1,147 @@
-# 프로젝트 이름
-MLOps_game_recommendation_project
-<br>
 
-## 💻 프로젝트 소개
-### <프로젝트 소개>
-- 이 프로젝트는 게임 추천 시스템을 설계하고, 이를 MLOps 파이프라인으로 자동화하는 것을 목표로 진행되었습니다.
-단순히 추천 모델을 구현하는 것에서 그치지 않고, 실제 서비스 환경에서 운영 가능한 수준으로 발전시키는 과정을 경험했습니다.
+# 🎮 MLOps 기반 게임 추천 시스템  
+**MLOps Game Recommendation Project — 개인 연구/실험 기반 작품**
 
-🎯 목표
+팀 프로젝트: https://github.com/AIBootcamp16/mlops-cloud-project-mlops-3
 
--사용자의 게임 플레이 데이터를 기반으로 취향에 맞는 새로운 게임을 추천하는 시스템 구축.
+## 💻 프로젝트 개요  
+이 프로젝트는 **게임 추천 모델을 설계하고**, 이를 실제 운영 가능한 **MLOps 파이프라인**으로 구성하는 것을 목표로 했다.  
+단순한 분석 수준의 추천 모델이 아니라:
 
--데이터 수집부터 모델 학습, 추론, 모니터링, 알림, CI/CD까지 이어지는 엔드 투 엔드(End-to-End) MLOps 파이프라인 구현.
+- Docker로 환경 일관성 확보  
+- Airflow로 파이프라인 자동화  
+- Slack으로 모니터링 및 알림  
+- GitHub Actions로 CI/CD 구축  
 
-🔧 기술적 특징
+까지 적용한 **End-to-End ML 시스템 구축 경험**이 담겨 있다.
 
-1. 데이터 수집: RAWG API를 통해 게임 데이터(장르, 평점, 플레이타임 등) 자동 수집.
+본 저장소는 원래 팀 프로젝트의 dev 버전에서 출발했지만, 이후 **개인적으로 실험하고 확장한 코드들**을 정리해 하나의 작품으로 재구성한 것이다.
 
-2. 모델링: Item-based Collaborative Filtering을 활용한 추천 모델 구현.
+---
 
-3. 환경 일관성: Docker를 통한 컨테이너 기반 학습 및 추론 환경 구성.
+## 🎯 목표  
+- **사용자 게임 플레이 이력 기반 추천 모델(Item-CF) 구현**  
+- **RAWG API 기반 게임 데이터 자동 수집/검증/전처리**  
+- **Airflow DAG로 학습 → 검증 → 추론 → 알림 전체 자동화**  
+- **Docker + GitHub Actions로 CI/CD 구성**  
+- **W&B로 실험 버전 관리 및 성능 추적**
 
-4. 파이프라인 관리: Airflow를 활용하여 DAG 단위로 데이터 검증 → 학습 → 추론 → 알림 자동화.
+---
 
-5. 실험 관리: W&B(Weights & Biases)로 모델 학습 기록 및 성능 추적.
+## 🔧 기술적 특징  
 
-6. CI/CD: GitHub Actions + Docker Hub를 이용한 빌드 및 배포 자동화.
+### **1) 데이터 수집 & 전처리**
+- RAWG API를 통해 게임 메타데이터 자동 수집  
+- Label Encoding, StandardScaler, 장르 임베딩 등을 활용한 특징 생성  
+- Airflow 상에서 데이터 검증(Validation Task) 자동화  
 
-<br>
+### **2) 모델링**  
+- Item-based Collaborative Filtering (아이템 기반 협업 필터링)  
+- 사용자 게임 플레이 이력을 기반으로 유사도 추천  
+- W&B로 실험 파라미터 기록 및 모델 버전 관리  
 
-### <작품 소개>
-- 이 작품은 게임 추천 서비스 프로토타입으로, 특정 유저 ID를 기준으로 새로운 게임을 추천해줍니다.
-최종 결과물은 운영 환경을 고려한 MLOps 파이프라인과 함께 제공됩니다.
+### **3) 환경 일관성 (Docker)**  
+- Dockerfile 기반으로 학습/추론 환경을 통일  
+- 어디서든 동일한 환경에서 모델 실행 가능  
 
-💡 사용자 관점에서 할 수 있는 것
+### **4) 파이프라인 자동화 (Airflow)**  
+- DAG 기반 데이터 파이프라인 구성  
+- 데이터 수집 → 전처리 → 학습 → 추론 → Slack 알림 자동 실행  
+- DockerOperator 사용  
 
--user_id(1~100)를 입력하면, 해당 사용자가 플레이한 게임과 유사한 게임 목록을 추천받을 수 있음.
+### **5) CI/CD (GitHub Actions)**  
+- main 또는 modeling 브랜치 push 시 자동 빌드  
+- Docker Hub에 자동 배포  
+- Airflow에서 최신 이미지 자동 사용 가능  
 
--추천 결과는 Airflow DAG 실행 후 자동으로 생성되며, Slack 알림으로 결과 확인 가능.
+---
 
--Docker 이미지를 통해 어디서든 동일한 환경에서 실행 가능.
+## 🕹 사용자 기능  
+- `user_id`(1~100)를 입력하면 추천 게임 Top-N 출력  
+- DAG 실행 후 결과 자동 생성  
+- Slack 알림으로 결과 확인 가능  
+- Docker run 하나로 동일한 환경에서 재현 가능  
 
+---
 
-📊 산출물
+## 📊 산출물  
 
--추천 모델 결과: 유사 게임 Top-N 리스트
+| 항목 | 설명 |
+|------|------|
+| 추천 모델 결과 | 사용자별 유사 게임 Top-N 출력 |
+| Airflow DAG | 수집 → 검증 → 학습 → 추론 → 알림 전체 파이프라인 |
+| 로그 & 모니터링 | Slack 알림, Docker 로그, Airflow Web UI |
+| CI/CD | GitHub Actions로 Docker 이미지 자동 빌드/배포 |
 
--Airflow DAG: 데이터 수집 → 모델 학습 → 추천 추론 → 알림까지의 워크플로우
-
--로그 & 알림: DAG 실행 결과가 Slack으로 전송되어 모니터링 가능
-
--CI/CD 환경: GitHub Actions를 통한 Docker 이미지 자동 빌드 및 업로드
-
-<br>
-
-
-## 👨‍👩‍👦‍👦 팀 구성원
-
-| ![권문진](https://avatars.githubusercontent.com/u/156163982?v=4) | ![고민서](https://avatars.githubusercontent.com/u/156163982?v=4) | ![김동근](https://avatars.githubusercontent.com/u/156163982?v=4) | ![이수민](https://avatars.githubusercontent.com/u/156163982?v=4) | ![오패캠](https://avatars.githubusercontent.com/u/156163982?v=4) |
-| :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
-|            [권문진](https://github.com/UpstageAILab)             |            [고민서](https://github.com/UpstageAILab)             |            [김동근](https://github.com/UpstageAILab)             |            [이수민](https://github.com/UpstageAILab)             |            [허예경](https://github.com/UpstageAILab)             |
-|                            팀장, 담당 역할                             |                            담당 역할                             |                            담당 역할                             |                            담당 역할                             |                            담당 역할                             |
-
-<br>
-
-## 🔨 개발 환경 및 기술 스택
-⚙️ 개발환경
-
--OS: Windows 10 + WSL2 (Ubuntu 20.04)
-
--IDE/Editor: VS Code, Jupyter Notebook
-
--패키지 관리: Conda / pip
-
--컨테이너 환경: Docker Desktop (Windows), Docker Compose
-
--워크플로우 관리: Apache Airflow (Docker 기반)
-
--형상 관리: Git, GitHub
-
-
-🔧 기술 스택
-
--주언어: Python 3.9
-
--데이터 처리 & 분석: pandas, numpy, scikit-learn
-
--모델링: Item-based Collaborative Filtering (콘텐츠 기반 추천)
-
--실험 관리: Weights & Biases (W&B)
-
--MLOps/인프라:Docker (환경 일관성 보장), Airflow (데이터 파이프라인 자동화), Slack Webhook (Airflow Operator 활용 알림), GitHub Actions (CI/CD 자동화), AWS (향후 배포 고려)
-
-
-🤝 협업 & 이슈 관리
-
--이슈 관리: GitHub Issues & Projects
-
--협업 툴: Notion (작업 분배, 문서화) + GitHub (버전 관리, 코드 리뷰)
-
--버전 관리 전략: Git Flow 일부 적용 (메인 브랜치 + 기능별 브랜치)
-
-<br>
+---
 
 ## 📁 프로젝트 구조
 
 ```
 .
 ├── Airflow/
-│   ├── dags/                           # Airflow DAGs (v1 ~ v6)
-│   │   ├── game_recommend_mlops_v1.py
-│   │   ├── game_recommend_mlops_v2.py
-│   │   ├── game_recommend_mlops_v3.py
-│   │   ├── game_recommend_mlops_v4.py
-│   │   ├── game_recommend_mlops_v5.py
-│   │   └── game_recommend_mlops_v6.py
-│   │
+│   ├── dags/
 │   └── yaml/
-│       ├── yaml
-│       └── ci-cd.yml                   # Airflow 관련 YAML 설정
 │
-├── opt/                                # 컨테이너 실행 코드 및 환경
-│   ├── .dockerignore
+├── opt/
 │   ├── Dockerfile
 │   ├── requirements.txt
-│   │
-│   ├── data-prepare/                   # 데이터 수집 + 전처리
-│   │   ├── .env.template
-│   │   ├── crawler.py
-│   │   ├── main.py
-│   │   ├── processing.py
-│   │   │
-│   │   └── result/
-│   │       ├── game_log.csv
-│   │       └── popular_games.csv
-│   │
-│   └── mlops/                          # 운영용 MLOps 파이프라인
-│       ├── .env.template
-│       │
-│       ├── dataset/
-│       │   └── games_log.csv
-│       │
-│       └── src/
-│           ├── dataset/
-│           ├── evaluate/
-│           ├── inference/
-│           ├── model/
-│           ├── static/
-│           ├── templates/
-│           ├── train/
-│           ├── utils/
-│           │
-│           ├── main.py
-│           └── webapp.py
+│   ├── data-prepare/
+│   └── mlops/
 │
-├── mlops-research/                     # 연구/실험용 코드 (baseline, prototype)
+├── mlops-research/
 │   └── src/
-│       ├── models/
-│       ├── data/
-│       ├── preprocessing.py
-│       └── main.py
-│
-├── .github/workflows/
-│   └── ci.yml                          # GitHub Actions 워크플로우
 │
 ├── tests/
-│   └── test_utils.py                   # 유닛 테스트 코드
-│
-├── requirements.txt
-├── .gitignore
-├── .env.example
+├── .github/workflows/
+│   └── ci.yml
 └── README.md
-
 ```
 
+---
 
+## ⚙️ CI/CD 자동화 (GitHub Actions)
+프로젝트 초기에는 dev 브랜치 기반으로 Docker 이미지를 자동 빌드하도록 구성했지만,  
+개인 연구 버전으로 구조가 재정비되면서 브랜치 체계가 변경되어 Actions가 일시적으로 중단되었다.  
+현재는 **main / modeling** 중심으로 트리거되도록 다시 정비하였다.
 
-## 💻​ 구현 기능
+### 🔄 동작 방식
+- main 또는 modeling push 시 자동 트리거  
+- Docker 이미지 빌드 후 Docker Hub에 push  
+- Airflow 환경에서 최신 이미지 자동 반영  
 
-🔹 데이터 파이프라인
+### 🧩 Workflow 예시
+```yaml
+on:
+  push:
+    branches:
+      - main
+      - modeling
 
--게임 데이터 수집: RAWG API를 통해 게임 메타데이터 자동 수집 (genre, rating, playtime, owned_ratio 등).
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
--데이터 검증: 수집된 데이터에 대해 레코드 존재 여부 및 필드 유효성 확인.
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
--데이터 전처리: Label Encoding, StandardScaler, 장르 임베딩 벡터화 진행.
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: moongs95/mlops-game-recommender:latest
+```
 
+---
 
+## 🚨 트러블슈팅 요약  
 
-🔹 모델링 & 학습
-
--추천 모델: Item-based Collaborative Filtering (Item-CF) 기반 추천.
-
--학습 실행: mlops/src/main.py를 통해 모델 학습 자동화.
-
--실험 관리: W&B(Weights & Biases)를 활용해 실험 기록 및 성능 추적.
-
--결과 저장: 학습된 모델 아티팩트는 공유 디렉토리(/opt/mlops/models)에 저장.
-
-
-
-🔹 추론 및 결과
-
--추천 추론: 특정 유저(user_id=12)를 입력하면 유사 게임 Top-N 추천 제공.
-
--Airflow 통합: DAG 실행을 통해 학습 후 자동으로 추천 결과 생성.
-
-
-
-🔹 모니터링 & 알림
-
--Slack 알림: DAG 실행 성공/실패 여부를 Slack Webhook으로 전송.
-
--에러 핸들링: 데이터 검증 실패 또는 DockerOperator 오류 발생 시 즉시 알림.
-
-
-
-🔹 MLOps & 자동화
-
--Docker 컨테이너화: 모델 학습 및 추론 환경을 Docker 이미지(moongs95/third-party-mlops:v5)로 일관성 있게 관리.
-
--Airflow 파이프라인: 데이터 수집 → 검증 → 학습 → 추론 → 알림을 DAG로 자동화.
-
--CI/CD: GitHub Actions로 Docker 이미지 자동 빌드 및 Docker Hub 푸시.
-
-<br>
-
-## 🚨​ 트러블 슈팅
 
 🔹 Airflow Web UI(8080) 접속 불가
 
@@ -284,9 +199,9 @@ MLOps_game_recommendation_project
 
 -결과: 로그 정상 출력, 디버깅 가능해짐.
 
-<br>
+---
 
-## 📌 프로젝트 회고
+## 📌 프로젝트 회고  
 과거 머신러닝 프로젝트에서는 모델링 자체를 설계하고 구현하는 과정만으로도 큰 어려움이 따랐다. 데이터 전처리, 피처 엔지니어링, 모델 학습 및 평가를 반복하는 과정에서 수많은 시행착오를 겪으며, 당시에도 벅차다는 느낌을 강하게 받았다. 그러나 이번 프로젝트는 그러한 경험 위에서 다시 출발했기 때문에, 추천 모델링(Item-CF 기반) 단계까지는 이전 경험을 활용하여 상대적으로 안정적으로 수행할 수 있었다.
 
 하지만 이번 프로젝트의 핵심은 단순한 모델링이 아니었다. Docker를 통한 컨테이너화, Airflow 기반 파이프라인 구축, CI/CD와 AWS 연계라는 새로운 과제가 뒤따랐다. 이 과정에서 기술적 난관이 이어졌다.
@@ -301,8 +216,5 @@ MLOps_game_recommendation_project
 
 앞으로는 이 경험을 토대로 더 다양한 프로젝트를 통해 MLOps 실무 능력을 보완하고, 궁극적으로는 데이터 사이언스와 엔지니어링을 잇는 다리 역할을 수행할 수 있는 전문성을 키워가고자 한다.
 
-<br>
-
-
-
+---
 
